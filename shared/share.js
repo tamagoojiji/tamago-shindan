@@ -101,7 +101,7 @@ var ShindanShare = (function () {
     // フッターテキスト
     ctx.fillStyle = "#fff";
     ctx.font = "bold 28px 'Hiragino Sans', sans-serif";
-    ctx.fillText("@tamago_app", 540, 1030);
+    ctx.fillText("@tamago.app", 540, 1030);
 
     callback(canvas);
   }
