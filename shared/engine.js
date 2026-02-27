@@ -6,7 +6,7 @@ var ShindanEngine = (function () {
   "use strict";
 
   // GAS Web App URL（デプロイ後に設定）
-  var GAS_URL = "";
+  var GAS_URL = "https://script.google.com/macros/s/AKfycbyCniP4JeRvGp7K0Hpl2Z0hGyXPEolxcvoabaNOUt0oNverpn4mv-wI3_SlcMFWu075/exec";
 
   var state = {
     questions: [],
