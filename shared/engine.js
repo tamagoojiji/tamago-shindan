@@ -168,7 +168,10 @@ var ShindanEngine = (function () {
         levelName: level.name,
         percent: percent,
         score: state.totalScore,
-        maxScore: state.maxScore
+        maxScore: state.maxScore,
+        message: level.message,
+        recommendTitle: state.config.recommendTitle,
+        recommendations: state.config.getRecommendations(state.answers)
       });
     }
   }
@@ -273,7 +276,10 @@ var ShindanEngine = (function () {
         levelName: level.name,
         percent: percent,
         score: data.score,
-        maxScore: data.maxScore
+        maxScore: data.maxScore,
+        message: level.message,
+        recommendTitle: state.config.recommendTitle,
+        recommendations: state.config.getRecommendations(answers)
       });
     }
   }

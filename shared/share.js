@@ -20,6 +20,28 @@ var ShindanShare = (function () {
     if (copyBtn) copyBtn.addEventListener("click", copyLink);
   }
 
+  // === テキスト折り返し描画 ===
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    var chars = text.split("");
+    var line = "";
+    var currentY = y;
+    var isCenter = (ctx.textAlign === "center");
+
+    for (var i = 0; i < chars.length; i++) {
+      var testLine = line + chars[i];
+      var metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && line.length > 0) {
+        ctx.fillText(line, x, currentY);
+        line = chars[i];
+        currentY += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, currentY);
+    return currentY + lineHeight;
+  }
+
   // === Canvas画像生成（1080×1080） ===
   function generateImage(callback) {
     var canvas = document.createElement("canvas");
@@ -43,18 +65,16 @@ var ShindanShare = (function () {
     ctx.textAlign = "center";
     ctx.fillText(shareData.appName, 540, 76);
 
-    // 円グラフ
+    // 円グラフ（小さめに上寄せ）
     var centerX = 540;
-    var centerY = 420;
-    var radius = 150;
+    var centerY = 310;
+    var radius = 120;
 
-    // 背景円
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.fillStyle = "#E8DDD2";
     ctx.fill();
 
-    // スコア円
     var angle = (shareData.percent / 100) * Math.PI * 2;
     var color = shareData.percent >= 75 ? "#27AE60" : shareData.percent >= 50 ? "#F5A623" : "#E74C3C";
     ctx.beginPath();
@@ -64,29 +84,69 @@ var ShindanShare = (function () {
     ctx.fillStyle = color;
     ctx.fill();
 
-    // 中央の白い円
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 110, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, 88, 0, Math.PI * 2);
     ctx.fillStyle = "#FFF8F0";
     ctx.fill();
 
-    // パーセント
     ctx.fillStyle = "#F5A623";
-    ctx.font = "bold 64px 'Hiragino Sans', sans-serif";
+    ctx.font = "bold 52px 'Hiragino Sans', sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(shareData.percent + "%", centerX, centerY - 10);
+    ctx.fillText(shareData.percent + "%", centerX, centerY - 8);
 
-    // スコア
     ctx.fillStyle = "#888";
-    ctx.font = "28px 'Hiragino Sans', sans-serif";
-    ctx.fillText(shareData.score + " / " + shareData.maxScore, centerX, centerY + 40);
+    ctx.font = "22px 'Hiragino Sans', sans-serif";
+    ctx.fillText(shareData.score + " / " + shareData.maxScore, centerX, centerY + 30);
 
     // レベル名
     ctx.fillStyle = "#1B2A4A";
-    ctx.font = "bold 48px 'Hiragino Sans', sans-serif";
+    ctx.font = "bold 44px 'Hiragino Sans', sans-serif";
     ctx.textBaseline = "alphabetic";
-    ctx.fillText(shareData.levelName, 540, 660);
+    ctx.fillText(shareData.levelName, 540, 510);
+
+    // メッセージ（折り返し）
+    ctx.fillStyle = "#666";
+    ctx.font = "24px 'Hiragino Sans', sans-serif";
+    var msgY = wrapText(ctx, shareData.message, 540, 555, 900, 36);
+
+    // レコメンド
+    var recs = shareData.recommendations || [];
+    if (recs.length > 0) {
+      var recY = msgY + 30;
+
+      ctx.fillStyle = "#1B2A4A";
+      ctx.font = "bold 26px 'Hiragino Sans', sans-serif";
+      ctx.fillText(shareData.recommendTitle || "改善ポイント", 540, recY);
+      recY += 36;
+
+      ctx.textAlign = "left";
+      for (var i = 0; i < recs.length; i++) {
+        // 番号バッジ
+        ctx.fillStyle = "#F5A623";
+        ctx.beginPath();
+        ctx.arc(120, recY - 8, 18, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 20px 'Hiragino Sans', sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(String(i + 1), 120, recY - 6);
+
+        // カテゴリ名
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#1B2A4A";
+        ctx.font = "bold 24px 'Hiragino Sans', sans-serif";
+        ctx.fillText(recs[i].category, 150, recY);
+
+        // アドバイス
+        recY += 32;
+        ctx.fillStyle = "#888";
+        ctx.font = "20px 'Hiragino Sans', sans-serif";
+        recY = wrapText(ctx, recs[i].advice, 150, recY, 860, 28);
+        recY += 16;
+      }
+      ctx.textAlign = "center";
+    }
 
     // フッター帯
     ctx.fillStyle = "#F5A623";
@@ -94,9 +154,9 @@ var ShindanShare = (function () {
     ctx.fillStyle = "#1B2A4A";
     ctx.fillRect(0, 966, 1080, 114);
 
-    // フッターテキスト
     ctx.fillStyle = "#fff";
     ctx.font = "bold 28px 'Hiragino Sans', sans-serif";
+    ctx.textAlign = "center";
     ctx.fillText("@tamago.app", 540, 1030);
 
     callback(canvas);
