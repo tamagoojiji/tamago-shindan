@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>確定申告準備度チェック | たまごの診断</title>
+  <meta name="description" content="あなたの確定申告の準備度を10問でチェック！不足している準備がわかります。">
+  <meta property="og:title" content="確定申告準備度チェック | たまごの診断">
+  <meta property="og:description" content="あなたの確定申告の準備度を10問でチェック！">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+  <!-- イントロ画面 -->
+  <div id="intro-screen" class="screen">
+    <div class="container">
+      <div class="intro-card">
+        <div class="intro-icon">📋</div>
+        <h1 class="intro-title">確定申告準備度チェック</h1>
+        <p class="intro-desc">あなたの確定申告の準備がどれくらいできているかを診断します。<br>不足している準備がひと目でわかります！</p>
+        <div class="intro-meta">
+          <span>📝 10問</span>
+          <span>⏱ 約2分</span>
+        </div>
+        <button id="start-btn" class="btn btn-primary start-btn">診断スタート</button>
+      </div>
+      <div class="footer">
+        <a href="../../">他の診断を見る</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- クイズ画面 -->
+  <div id="quiz-screen" class="screen hidden">
+    <div class="container">
+      <div class="quiz-header">
+        <div class="progress-info">
+          <span id="question-number">1</span> / <span id="total-questions">10</span>
+        </div>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+      <div class="quiz-body">
+        <span id="question-category" class="question-category"></span>
+        <p id="question-text" class="question-text"></p>
+        <div id="choices-container" class="choices-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="result-screen" class="screen hidden">
+    <div class="container">
+      <div class="result-card">
+        <p class="result-label">あなたの準備度は…</p>
+        <h2 id="result-level" class="result-level"></h2>
+        <div id="result-chart" class="result-chart">
+          <div class="chart-inner">
+            <span id="result-percent" class="result-percent">0%</span>
+            <span id="result-score" class="result-score">0/30</span>
+          </div>
+        </div>
+        <p id="result-message" class="result-message"></p>
+
+        <div id="recommend-section" class="recommend-section">
+          <h3 class="recommend-title">不足している準備項目</h3>
+          <div class="recommend-list"></div>
+        </div>
+
+        <div class="share-section">
+          <p class="share-title">結果をシェア</p>
+          <div class="share-buttons">
+            <button id="share-save" class="share-btn">
+              <span class="share-btn-icon">📷</span>
+              画像保存
+            </button>
+            <button id="share-line" class="share-btn">
+              <span class="share-btn-icon">💬</span>
+              LINE
+            </button>
+            <button id="share-copy" class="share-btn">
+              <span class="share-btn-icon">🔗</span>
+              コピー
+            </button>
+          </div>
+        </div>
+
+        <div class="cta-section">
+          <p class="cta-text">確定申告の準備に役立つ情報を発信中！</p>
+          <a href="https://www.instagram.com/tamago_app" target="_blank" rel="noopener" class="cta-btn">@tamago_app をフォロー</a>
+        </div>
+
+        <div class="result-actions">
+          <button id="retry-btn" class="btn btn-primary">もう一度診断する</button>
+          <button id="back-top-btn" class="btn btn-secondary">他の診断を見る</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="../../shared/engine.js"></script>
+  <script src="../../shared/share.js"></script>
+  <script src="../../shared/liff.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
