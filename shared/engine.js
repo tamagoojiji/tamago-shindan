@@ -1,21 +1,24 @@
 /**
  * 診断エンジン（共通）
- * 初期化・画面遷移・質問描画・回答処理・スコアリング・結果表示
+ * 初期化・画面遷移・質問描画・回答処理・スコアリング・結果表示・GAS連携
  */
 var ShindanEngine = (function () {
   "use strict";
 
+  // GAS Web App URL（デプロイ後に設定）
+  var GAS_URL = "";
+
   var state = {
     questions: [],
     currentIndex: 0,
-    answers: [],       // { questionId, category, points, maxPoints }
+    answers: [],
     totalScore: 0,
     maxScore: 0,
-    config: null       // アプリ固有の設定（data.jsから受け取る）
+    config: null
   };
 
   var screens = {};
-  var AUTO_ADVANCE_DELAY = 500; // 選択後0.5秒で次へ
+  var AUTO_ADVANCE_DELAY = 500;
 
   // === 初期化 ===
   function init(config) {
@@ -29,19 +32,39 @@ var ShindanEngine = (function () {
       result: document.getElementById("result-screen")
     };
 
-    // イベントリスナー
     document.getElementById("start-btn").addEventListener("click", startQuiz);
     document.getElementById("retry-btn").addEventListener("click", retry);
 
     var backBtn = document.getElementById("back-top-btn");
     if (backBtn) {
       backBtn.addEventListener("click", function () {
-        // apps/xxx/ → ../../ で常にトップへ遷移（ローカル・GitHub Pages両対応）
         window.location.href = "../../";
       });
     }
 
-    showScreen("intro");
+    // URLに結果IDがあれば保存済み結果を表示
+    var resultId = getUrlParam("id");
+    if (resultId && GAS_URL) {
+      loadSavedResult(resultId);
+    } else {
+      showScreen("intro");
+    }
+  }
+
+  // === URLパラメータ取得 ===
+  function getUrlParam(key) {
+    var params = new URLSearchParams(window.location.search);
+    return params.get(key);
+  }
+
+  // === ランダムID生成（8文字） ===
+  function generateId() {
+    var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    var id = "";
+    for (var i = 0; i < 8; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
   }
 
   // === 画面遷移 ===
@@ -58,6 +81,10 @@ var ShindanEngine = (function () {
     state.currentIndex = 0;
     state.answers = [];
     state.totalScore = 0;
+    // リトライ時にURLパラメータをクリア
+    if (window.location.search) {
+      history.replaceState(null, "", window.location.pathname);
+    }
     showScreen("quiz");
     renderQuestion();
   }
@@ -66,23 +93,19 @@ var ShindanEngine = (function () {
   function renderQuestion() {
     var q = state.questions[state.currentIndex];
 
-    // プログレス
     var total = state.questions.length;
     document.getElementById("question-number").textContent = state.currentIndex + 1;
     document.getElementById("total-questions").textContent = total;
     document.getElementById("progress-fill").style.width =
       ((state.currentIndex + 1) / total * 100) + "%";
 
-    // カテゴリバッジ
     var badge = document.getElementById("question-category");
     if (badge && q.categoryLabel) {
       badge.textContent = q.categoryLabel;
     }
 
-    // 問題文
     document.getElementById("question-text").textContent = q.question;
 
-    // 選択肢
     var container = document.getElementById("choices-container");
     container.innerHTML = "";
 
@@ -101,14 +124,12 @@ var ShindanEngine = (function () {
   function handleAnswer(selectedIndex, question, selectedBtn) {
     var choice = question.choices[selectedIndex];
 
-    // ボタンをすべて無効化+選択したものをハイライト
     var buttons = document.querySelectorAll(".choice-btn");
     buttons.forEach(function (btn) {
       btn.classList.add("disabled");
     });
     selectedBtn.classList.add("selected");
 
-    // 回答を記録
     state.answers.push({
       questionId: question.id,
       category: question.category,
@@ -118,7 +139,6 @@ var ShindanEngine = (function () {
     });
     state.totalScore += choice.points;
 
-    // 0.5秒後に自動遷移
     setTimeout(function () {
       state.currentIndex++;
       if (state.currentIndex >= state.questions.length) {
@@ -134,24 +154,12 @@ var ShindanEngine = (function () {
     showScreen("result");
 
     var percent = Math.round((state.totalScore / state.maxScore) * 100);
-
-    // レベル判定
     var level = getLevel(percent);
 
-    // 円グラフ
-    var chart = document.getElementById("result-chart");
-    var color = percent >= 75 ? "#27AE60" : percent >= 50 ? "#F5A623" : "#E74C3C";
-    chart.style.background = "conic-gradient(" + color + " " + (percent * 3.6) + "deg, #E8DDD2 0deg)";
+    displayResult(percent, level, state.answers);
 
-    document.getElementById("result-percent").textContent = percent + "%";
-    document.getElementById("result-score").textContent = state.totalScore + " / " + state.maxScore;
-
-    // レベル名・メッセージ
-    document.getElementById("result-level").textContent = level.name;
-    document.getElementById("result-message").textContent = level.message;
-
-    // レコメンド
-    renderRecommendations();
+    // GASに結果を保存
+    saveToGas(percent, level);
 
     // シェア機能の初期化
     if (window.ShindanShare) {
@@ -161,6 +169,111 @@ var ShindanEngine = (function () {
         percent: percent,
         score: state.totalScore,
         maxScore: state.maxScore
+      });
+    }
+  }
+
+  // === 結果をDOMに描画（新規・保存済み共通） ===
+  function displayResult(percent, level, answers) {
+    var chart = document.getElementById("result-chart");
+    var color = percent >= 75 ? "#27AE60" : percent >= 50 ? "#F5A623" : "#E74C3C";
+    chart.style.background = "conic-gradient(" + color + " " + (percent * 3.6) + "deg, #E8DDD2 0deg)";
+
+    document.getElementById("result-percent").textContent = percent + "%";
+    document.getElementById("result-score").textContent =
+      Math.round(percent * state.maxScore / 100) + " / " + state.maxScore;
+
+    document.getElementById("result-level").textContent = level.name;
+    document.getElementById("result-message").textContent = level.message;
+
+    // レコメンド
+    renderRecommendations(answers);
+  }
+
+  // === GASに保存 ===
+  function saveToGas(percent, level) {
+    if (!GAS_URL) return;
+
+    var id = generateId();
+
+    var payload = {
+      id: id,
+      app: state.config.appName,
+      score: state.totalScore,
+      maxScore: state.maxScore,
+      percent: percent,
+      level: level.name,
+      answers: state.answers,
+      userAgent: navigator.userAgent
+    };
+
+    try {
+      fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      // サイレントに無視
+    }
+
+    // URLにIDを付与
+    var newUrl = window.location.pathname + "?id=" + id;
+    history.replaceState(null, "", newUrl);
+  }
+
+  // === 保存済み結果を読み込み（JSONP） ===
+  function loadSavedResult(id) {
+    // コールバック関数をグローバルに登録
+    var callbackName = "_shindanCallback_" + Date.now();
+    window[callbackName] = function (response) {
+      // クリーンアップ
+      delete window[callbackName];
+      var scriptEl = document.getElementById("jsonp-loader");
+      if (scriptEl) scriptEl.remove();
+
+      if (response.ok && response.data) {
+        showSavedResult(response.data);
+      } else {
+        // 結果が見つからない場合はイントロに戻す
+        showScreen("intro");
+      }
+    };
+
+    // JOSNPスクリプト読み込み
+    var script = document.createElement("script");
+    script.id = "jsonp-loader";
+    script.src = GAS_URL + "?id=" + encodeURIComponent(id) + "&callback=" + callbackName;
+    script.onerror = function () {
+      delete window[callbackName];
+      showScreen("intro");
+    };
+    document.head.appendChild(script);
+  }
+
+  // === 保存済み結果を描画 ===
+  function showSavedResult(data) {
+    showScreen("result");
+
+    var percent = data.percent;
+    var level = getLevel(percent);
+    var answers = data.answers || [];
+
+    // スコアを復元
+    state.totalScore = data.score;
+    state.answers = answers;
+
+    displayResult(percent, level, answers);
+
+    // シェア機能の初期化
+    if (window.ShindanShare) {
+      window.ShindanShare.init({
+        appName: state.config.appName,
+        levelName: level.name,
+        percent: percent,
+        score: data.score,
+        maxScore: data.maxScore
       });
     }
   }
@@ -177,11 +290,11 @@ var ShindanEngine = (function () {
   }
 
   // === レコメンド描画 ===
-  function renderRecommendations() {
+  function renderRecommendations(answers) {
     var container = document.getElementById("recommend-section");
     if (!container) return;
 
-    var recommendations = state.config.getRecommendations(state.answers);
+    var recommendations = state.config.getRecommendations(answers || state.answers);
     if (recommendations.length === 0) {
       container.classList.add("hidden");
       return;
@@ -214,7 +327,6 @@ var ShindanEngine = (function () {
     startQuiz();
   }
 
-  // === 外部からアクセス可能なAPI ===
   return {
     init: init,
     getState: function () { return state; }

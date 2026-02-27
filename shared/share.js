@@ -1,26 +1,22 @@
 /**
- * シェア機能（Canvas画像生成・LINEシェア・リンクコピー）
+ * シェア機能（Canvas画像生成→写真ライブラリ保存・結果URLコピー）
  */
 var ShindanShare = (function () {
   "use strict";
 
   var shareData = null;
-
   var initialized = false;
 
   function init(data) {
     shareData = data;
 
-    // リトライ時のイベントリスナー重複を防止
     if (initialized) return;
     initialized = true;
 
     var saveBtn = document.getElementById("share-save");
-    var lineBtn = document.getElementById("share-line");
     var copyBtn = document.getElementById("share-copy");
 
     if (saveBtn) saveBtn.addEventListener("click", saveImage);
-    if (lineBtn) lineBtn.addEventListener("click", shareLine);
     if (copyBtn) copyBtn.addEventListener("click", copyLink);
   }
 
@@ -106,44 +102,47 @@ var ShindanShare = (function () {
     callback(canvas);
   }
 
-  // === 画像保存 ===
+  // === 画像保存（Web Share API → iOSの写真ライブラリへ） ===
   function saveImage() {
     generateImage(function (canvas) {
-      var link = document.createElement("a");
-      link.download = "shindan-result.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+      canvas.toBlob(function (blob) {
+        var file = new File([blob], "shindan-result.png", { type: "image/png" });
+
+        // Web Share API（iOS Safari対応 → 共有シートから「画像を保存」）
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            files: [file],
+            title: shareData.appName + "の結果"
+          }).catch(function () {
+            // キャンセル時は何もしない
+          });
+        } else {
+          // フォールバック: ダウンロード
+          var link = document.createElement("a");
+          link.download = "shindan-result.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        }
+      }, "image/png");
     });
   }
 
-  // === LINEシェア ===
-  function shareLine() {
-    var text = "【" + shareData.appName + "】" +
-      shareData.levelName + "（" + shareData.percent + "%）でした！\n" +
-      window.location.href;
-    var url = "https://line.me/R/share?text=" + encodeURIComponent(text);
-    window.open(url, "_blank");
-  }
-
-  // === リンクコピー ===
+  // === 結果URLコピー ===
   function copyLink() {
-    var text = "【" + shareData.appName + "】" +
-      shareData.levelName + "（" + shareData.percent + "%）でした！\n" +
-      window.location.href;
+    var url = window.location.href;
 
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(function () {
-        showToast("コピーしました！");
+      navigator.clipboard.writeText(url).then(function () {
+        showToast("URLをコピーしました！");
       });
     } else {
-      // フォールバック
       var textarea = document.createElement("textarea");
-      textarea.value = text;
+      textarea.value = url;
       document.body.appendChild(textarea);
       textarea.select();
       document.execCommand("copy");
       document.body.removeChild(textarea);
-      showToast("コピーしました！");
+      showToast("URLをコピーしました！");
     }
   }
 
@@ -168,6 +167,7 @@ var ShindanShare = (function () {
   }
 
   return {
-    init: init
+    init: init,
+    showToast: showToast
   };
 })();
