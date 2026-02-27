@@ -293,9 +293,11 @@ body {
   text-align: left;
 }
 
-.choice-btn:hover {
-  border-color: var(--primary);
-  background: #FFF3E0;
+@media (hover: hover) {
+  .choice-btn:hover {
+    border-color: var(--primary);
+    background: #FFF3E0;
+  }
 }
 
 .choice-btn.selected {
