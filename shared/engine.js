@@ -42,13 +42,18 @@ var ShindanEngine = (function () {
       });
     }
 
-    // URLに結果IDがあれば保存済み結果を表示
-    var resultId = getUrlParam("id");
-    if (resultId && GAS_URL) {
-      loadSavedResult(resultId);
-    } else {
-      showScreen("intro");
-    }
+    // LIFF初期化
+    var liffReady = (window.ShindanLiff) ? ShindanLiff.init() : Promise.resolve();
+
+    liffReady.then(function () {
+      // URLに結果IDがあれば保存済み結果を表示
+      var resultId = getUrlParam("id");
+      if (resultId && GAS_URL) {
+        loadSavedResult(resultId);
+      } else {
+        showScreen("intro");
+      }
+    });
   }
 
   // === URLパラメータ取得 ===
@@ -199,27 +204,33 @@ var ShindanEngine = (function () {
 
     var id = generateId();
 
-    var payload = {
-      id: id,
-      app: state.config.appName,
-      score: state.totalScore,
-      maxScore: state.maxScore,
-      percent: percent,
-      level: level.name,
-      answers: state.answers,
-      userAgent: navigator.userAgent
-    };
+    var liffProfile = (window.ShindanLiff) ? ShindanLiff.getProfile() : Promise.resolve(null);
+    liffProfile.then(function (profile) {
+      var payload = {
+        id: id,
+        app: state.config.appName,
+        score: state.totalScore,
+        maxScore: state.maxScore,
+        percent: percent,
+        level: level.name,
+        answers: state.answers,
+        userAgent: navigator.userAgent,
+        lineUserId: profile ? profile.userId : null,
+        lineDisplayName: profile ? profile.displayName : null,
+        isLiff: (window.ShindanLiff) ? ShindanLiff.isInLiff() : false
+      };
 
-    try {
-      fetch(GAS_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(payload)
-      });
-    } catch (e) {
-      // サイレントに無視
-    }
+      try {
+        fetch(GAS_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        // サイレントに無視
+      }
+    });
 
     // URLにIDを付与
     var newUrl = window.location.pathname + "?id=" + id;
