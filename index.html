@@ -30,25 +30,47 @@
   <script src="apps.js?v=3"></script>
   <script src="shared/liff.js?v=3"></script>
   <script>
+    var GAS_API = "https://script.google.com/macros/s/AKfycbx6ybbTIA_BNu1c-7RwzAgI-dCtZ2Fv_I5jhgql_27oNYapDsaYDwgNbmfpa8fWZG_K/exec";
+
     ShindanLiff.init();
 
-    var now = new Date();
-    var container = document.getElementById("app-cards");
-    var published = APP_LIST.filter(function (app) {
-      return new Date(app.publishDate) <= now;
-    });
+    function renderApps(apps) {
+      var container = document.getElementById("app-cards");
+      container.innerHTML = "";
+      apps.forEach(function (app) {
+        var card = document.createElement("a");
+        card.href = app.path;
+        card.className = "app-card";
+        card.innerHTML =
+          '<div class="app-card-icon">' + app.icon + '</div>' +
+          '<h2 class="app-card-title">' + app.title + '</h2>' +
+          '<p class="app-card-desc">' + app.desc + '</p>' +
+          '<span class="app-card-tag">' + app.tag + '</span>';
+        container.appendChild(card);
+      });
+    }
 
-    published.forEach(function (app) {
-      var card = document.createElement("a");
-      card.href = app.path;
-      card.className = "app-card";
-      card.innerHTML =
-        '<div class="app-card-icon">' + app.icon + '</div>' +
-        '<h2 class="app-card-title">' + app.title + '</h2>' +
-        '<p class="app-card-desc">' + app.desc + '</p>' +
-        '<span class="app-card-tag">' + app.tag + '</span>';
-      container.appendChild(card);
-    });
+    // GASから取得 → 失敗時はapps.jsのローカルデータにフォールバック
+    fetch(GAS_API)
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.ok && data.apps && data.apps.length > 0) {
+          renderApps(data.apps);
+        } else {
+          fallbackToLocal();
+        }
+      })
+      .catch(function () {
+        fallbackToLocal();
+      });
+
+    function fallbackToLocal() {
+      var now = new Date();
+      var published = APP_LIST.filter(function (app) {
+        return new Date(app.publishDate) <= now;
+      });
+      renderApps(published);
+    }
   </script>
 </body>
 </html>
