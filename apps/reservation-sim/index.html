@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>予約管理シミュレーション | たまごのアプリ</title>
+  <meta name="description" content="サンプル予約を入力してカレンダー表示を体験！予約管理の便利さを実感できます。">
+  <meta property="og:title" content="予約管理シミュレーション | たまごのアプリ">
+  <meta property="og:description" content="サンプル予約を入力してカレンダー表示を体験！">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../../style.css?v=4">
+</head>
+<body>
+  <!-- イントロ画面 -->
+  <div id="intro-screen" data-screen class="screen">
+    <div class="container">
+      <div class="intro-card">
+        <div class="intro-icon">📅</div>
+        <h1 class="intro-title">予約管理シミュレーション</h1>
+        <p class="intro-desc">予約を入力すると、カレンダーとリストで見やすく表示！<br>「うちのサロンもこう管理できたら…」を体験できます。</p>
+        <div class="intro-meta">
+          <span>✏️ 入力体験</span>
+          <span>⏱ 約1分</span>
+        </div>
+        <button id="start-btn" class="btn btn-primary start-btn" onclick="FormUtils.showScreen('input-screen')">体験スタート</button>
+      </div>
+      <div class="footer">
+        <a href="../../">他のアプリを見る</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 入力画面 -->
+  <div id="input-screen" data-screen class="screen hidden">
+    <div class="container">
+      <h2 class="section-title">予約を追加</h2>
+
+      <button class="sample-btn" onclick="ReservationApp.loadSample()">📋 サンプルデータで試す</button>
+
+      <div class="intro-card" style="text-align:left;">
+        <div class="form-group">
+          <label class="form-label">お客様名</label>
+          <input type="text" id="res-name" class="form-input" placeholder="例：山田花子">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">日付</label>
+            <input type="date" id="res-date" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">時間</label>
+            <input type="time" id="res-time" class="form-input" value="10:00">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">メニュー</label>
+          <select id="res-menu" class="form-input form-select">
+            <option value="カット">カット</option>
+            <option value="カット+カラー">カット+カラー</option>
+            <option value="パーマ">パーマ</option>
+            <option value="トリートメント">トリートメント</option>
+            <option value="ヘッドスパ">ヘッドスパ</option>
+            <option value="整体60分">整体60分</option>
+            <option value="整体90分">整体90分</option>
+            <option value="骨盤矯正">骨盤矯正</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" onclick="ReservationApp.addReservation()">予約を追加</button>
+      </div>
+
+      <div id="reservation-count" style="text-align:center;margin:16px 0;font-size:13px;color:var(--text-light);"></div>
+
+      <div id="reservation-preview" class="reservation-list"></div>
+
+      <button id="show-result-btn" class="btn btn-primary hidden" style="width:100%;margin-top:16px;" onclick="ReservationApp.showResult()">カレンダーで見る</button>
+
+      <div class="footer">
+        <a href="../../">他のアプリを見る</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 結果画面 -->
+  <div id="result-screen" data-screen class="screen hidden">
+    <div class="container">
+      <div id="calendar-area" class="calendar"></div>
+
+      <h3 class="section-title">予約リスト</h3>
+      <div id="result-list" class="reservation-list"></div>
+
+      <div class="cta-section" style="margin-top:24px;">
+        <img src="../../images/icon.png" alt="たまご" class="cta-icon">
+        <p class="cta-text">予約管理をもっとラクにしたい方へ<br>ビジネス効率化のヒントを発信中！</p>
+        <a href="https://www.instagram.com/tamago.app" target="_blank" rel="noopener" class="cta-btn">@tamago.app をフォロー</a>
+      </div>
+
+      <div class="result-actions" style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="ReservationApp.reset()">もう一度試す</button>
+        <button class="btn btn-secondary" onclick="location.href='../../'">他のアプリを見る</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/form-utils.js?v=4"></script>
+  <script src="app.js?v=4"></script>
+</body>
+</html>

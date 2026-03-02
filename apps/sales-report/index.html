@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>売上日報 | たまごのアプリ</title>
+  <meta name="description" content="日々の売上を簡単入力。週次・月次サマリーで経営を見える化！">
+  <meta property="og:title" content="売上日報 | たまごのアプリ">
+  <meta property="og:description" content="日々の売上を簡単入力。週次・月次サマリーで経営を見える化！">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="../../style.css?v=4">
+</head>
+<body>
+  <!-- イントロ画面 -->
+  <div id="intro-screen" data-screen class="screen">
+    <div class="container">
+      <div class="intro-card">
+        <div class="intro-icon">💰</div>
+        <h1 class="intro-title">売上日報</h1>
+        <p class="intro-desc">日々の売上をサクッと入力。<br>週次・月次のサマリーで経営を見える化できます！</p>
+        <div class="intro-meta">
+          <span>📊 集計付き</span>
+          <span>💾 データ保存</span>
+        </div>
+        <button class="btn btn-primary start-btn" onclick="SalesApp.start()">使ってみる</button>
+      </div>
+      <div class="footer">
+        <a href="../../">他のアプリを見る</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- メイン画面 -->
+  <div id="main-screen" data-screen class="screen hidden">
+    <div class="container">
+      <h2 style="font-size:18px;font-weight:800;color:var(--secondary);margin-bottom:12px;">💰 売上日報</h2>
+
+      <!-- タブ -->
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="SalesApp.switchTab('input')">入力</button>
+        <button class="tab-btn" onclick="SalesApp.switchTab('daily')">日次</button>
+        <button class="tab-btn" onclick="SalesApp.switchTab('summary')">サマリー</button>
+      </div>
+
+      <!-- 入力タブ -->
+      <div id="tab-input" class="tab-content active">
+        <div class="intro-card" style="text-align:left;">
+          <div class="form-group">
+            <label class="form-label">日付</label>
+            <input type="date" id="sale-date" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">項目</label>
+            <input type="text" id="sale-item" class="form-input" placeholder="例：カット+カラー">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">金額</label>
+              <input type="number" id="sale-amount" class="form-input" placeholder="例：8800">
+            </div>
+            <div class="form-group">
+              <label class="form-label">支払方法</label>
+              <select id="sale-payment" class="form-input form-select">
+                <option value="現金">現金</option>
+                <option value="カード">カード</option>
+                <option value="電子マネー">電子マネー</option>
+                <option value="QR決済">QR決済</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;" onclick="SalesApp.addSale()">売上を追加</button>
+        </div>
+
+        <h3 class="section-title">今日の売上</h3>
+        <div id="today-sales"></div>
+        <div id="today-total" style="text-align:center;margin-top:12px;"></div>
+      </div>
+
+      <!-- 日次タブ -->
+      <div id="tab-daily" class="tab-content">
+        <div id="daily-view"></div>
+      </div>
+
+      <!-- サマリータブ -->
+      <div id="tab-summary" class="tab-content">
+        <div id="summary-view"></div>
+      </div>
+
+      <div class="cta-section" style="margin-top:24px;">
+        <img src="../../images/icon.png" alt="たまご" class="cta-icon">
+        <p class="cta-text">経営をもっとラクにするヒントを発信中！</p>
+        <a href="https://www.instagram.com/tamago.app" target="_blank" rel="noopener" class="cta-btn">@tamago.app をフォロー</a>
+      </div>
+
+      <div class="footer">
+        <a href="../../">他のアプリを見る</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/form-utils.js?v=4"></script>
+  <script src="app.js?v=4"></script>
+</body>
+</html>

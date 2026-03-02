@@ -30,5 +30,32 @@ var APP_LIST = [
     desc: "お店のリピート施策がどれくらいできているかを診断。改善ポイントがすぐにわかります。",
     tag: "10問 / 約2分",
     publishDate: "2026-02-28T00:00:00"
+  },
+  {
+    id: "reservation-sim",
+    path: "apps/reservation-sim/",
+    icon: "📅",
+    title: "予約管理シミュレーション",
+    desc: "サンプル予約を入力してカレンダー表示を体験！予約管理の便利さを実感できます。",
+    tag: "体験型 / 約1分",
+    publishDate: "2026-03-03T00:00:00"
+  },
+  {
+    id: "menu-creator",
+    path: "apps/menu-creator/",
+    icon: "📝",
+    title: "メニュー表作成",
+    desc: "メニュー項目を入力するだけでプロ級のメニュー表を作成。画像保存でSNSにも使えます。",
+    tag: "体験型 / 約2分",
+    publishDate: "2026-03-05T00:00:00"
+  },
+  {
+    id: "sales-report",
+    path: "apps/sales-report/",
+    icon: "💰",
+    title: "売上日報",
+    desc: "日々の売上をサクッと入力。週次・月次サマリーで経営を見える化できます。",
+    tag: "実用型 / データ保存",
+    publishDate: "2026-03-07T00:00:00"
   }
 ];
