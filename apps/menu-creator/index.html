@@ -8,7 +8,7 @@
   <meta property="og:title" content="メニュー表作成 | たまごのアプリ">
   <meta property="og:description" content="メニュー項目を入力するだけでプロ級のメニュー表を作成！">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="../../style.css?v=4">
+  <link rel="stylesheet" href="../../style.css?v=5">
 </head>
 <body>
   <!-- イントロ画面 -->
@@ -36,6 +36,32 @@
       <h2 class="section-title">メニュー表の情報</h2>
 
       <button class="sample-btn" onclick="MenuApp.loadSample()">📋 サンプルで試す</button>
+
+      <!-- テーマ選択 -->
+      <div class="intro-card" style="margin-bottom:12px;">
+        <label class="form-label" style="text-align:center;margin-bottom:12px;font-size:14px;">🎨 テーマを選ぶ</label>
+        <div class="theme-cards">
+          <button class="theme-card active" data-theme="elegant" onclick="MenuApp.selectTheme('elegant')">
+            <div class="theme-card-preview" style="background: linear-gradient(135deg, #1B2A4A 50%, #C9A84C 50%);"></div>
+            <span class="theme-card-label">✨ エレガント</span>
+          </button>
+          <button class="theme-card" data-theme="natural" onclick="MenuApp.selectTheme('natural')">
+            <div class="theme-card-preview" style="background: linear-gradient(135deg, #4A6741 50%, #8B7355 50%);"></div>
+            <span class="theme-card-label">🌿 ナチュラル</span>
+          </button>
+          <button class="theme-card" data-theme="simple" onclick="MenuApp.selectTheme('simple')">
+            <div class="theme-card-preview" style="background: linear-gradient(135deg, #222222 50%, #666666 50%);"></div>
+            <span class="theme-card-label">▫️ シンプル</span>
+          </button>
+          <button class="theme-card" data-theme="pop" onclick="MenuApp.selectTheme('pop')">
+            <div class="theme-card-preview" style="background: linear-gradient(135deg, #E75480 50%, #FFB6C1 50%);"></div>
+            <span class="theme-card-label">🎀 ポップ</span>
+          </button>
+        </div>
+
+        <label class="form-label" style="text-align:center;margin:16px 0 10px;font-size:14px;">🎨 カラーを選ぶ</label>
+        <div id="color-swatches" class="color-swatches"></div>
+      </div>
 
       <div class="intro-card" style="text-align:left;">
         <div class="form-group">
@@ -84,7 +110,7 @@
     </div>
   </div>
 
-  <script src="../../shared/form-utils.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="../../shared/form-utils.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

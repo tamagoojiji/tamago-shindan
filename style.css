@@ -1079,6 +1079,74 @@ body {
   margin: 20px 0 10px;
 }
 
+/* === テーマ・カラー選択 === */
+.theme-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.theme-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-card:hover {
+  border-color: var(--primary);
+}
+
+.theme-card.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.25);
+}
+
+.theme-card-preview {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.theme-card-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.color-swatches {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.color-swatch.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.3);
+  transform: scale(1.1);
+}
+
 /* === レスポンシブ === */
 @media (max-width: 480px) {
   .question-text {
