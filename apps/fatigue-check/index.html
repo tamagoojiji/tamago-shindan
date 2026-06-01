@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>自分へのご褒美タイプ診断 | たまごのアプリ</title>
-  <meta name="description" content="10問でわかる、あなたにぴったりの“自分へのごほうび”タイプ。30秒で診断して、結果をシェアしよう。">
-  <meta property="og:title" content="自分へのご褒美タイプ診断">
-  <meta property="og:description" content="10問でわかる、あなたにぴったりの“自分へのごほうび”タイプ。">
+  <title>隠れ疲れ度チェック | たまごのアプリ</title>
+  <meta name="description" content="10問でわかる、あなたの“隠れ疲れ度”。がんばり屋さんほど当たるかも。30秒で診断して、自分をねぎらおう。">
+  <meta property="og:title" content="隠れ疲れ度チェック">
+  <meta property="og:description" content="10問でわかる、あなたの“隠れ疲れ度”。がんばり屋さんほど当たるかも。">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,16 +16,16 @@
     <!-- イントロ -->
     <section id="intro-screen" class="screen">
       <div class="card intro-card">
-        <div class="intro-emoji">🎁</div>
-        <h1 class="intro-title">自分へのご褒美タイプ診断</h1>
-        <p class="intro-lead">毎日おつかれさま。<br>あなたにぴったりの“ごほうび”、<br>10問で見つけてみませんか？</p>
+        <div class="intro-emoji">🫖</div>
+        <h1 class="intro-title">隠れ疲れ度チェック</h1>
+        <p class="intro-lead">がんばり屋さんほど、<br>気づかないうちにたまってるもの。<br>あなたの“隠れ疲れ”、のぞいてみませんか？</p>
         <ul class="intro-meta">
           <li>⏱ 約30秒</li>
           <li>📝 全10問</li>
           <li>💌 結果はシェアできます</li>
         </ul>
-        <button id="start-btn" class="btn btn-primary">診断をはじめる</button>
-        <p class="intro-note">あてはまるものをえらぶだけ。考えすぎず直感でどうぞ🥚</p>
+        <button id="start-btn" class="btn btn-primary">チェックをはじめる</button>
+        <p class="intro-note">あてはまるものをえらぶだけ。直感でどうぞ🥚</p>
       </div>
     </section>
 
@@ -44,18 +44,19 @@
     <!-- 結果 -->
     <section id="result-screen" class="screen hidden">
       <div class="card result-card">
-        <p class="result-label">あなたのご褒美タイプは…</p>
-        <div id="result-emoji" class="result-emoji">🛋️</div>
+        <p class="result-label">あなたの隠れ疲れ度は…</p>
+        <div id="result-ring" class="result-ring"><span id="result-percent" class="result-percent">0%</span></div>
+        <div id="result-emoji" class="result-emoji">🌷</div>
         <h2 id="result-name" class="result-name">タイプ名</h2>
-        <p id="result-catch" class="result-catch">キャッチコピー</p>
         <p id="result-comment" class="result-comment">コメント</p>
-        <p id="result-tip" class="result-tip">おすすめごほうび</p>
+        <p id="result-tip" class="result-tip">今日のひとこと</p>
 
         <div class="share">
           <button id="share-save" class="btn btn-primary">📷 結果を画像で保存</button>
           <button id="share-copy" class="btn btn-ghost">🔗 リンクをコピー</button>
         </div>
-        <button id="retry-btn" class="btn btn-text">もう一度診断する</button>
+        <button id="retry-btn" class="btn btn-text">もう一度チェックする</button>
+        <p class="disclaimer">※遊びのチェックです。医学的な診断ではありません。つらいときは無理せず、まわりや専門の窓口に頼ってくださいね。</p>
       </div>
 
       <!-- 副CTA: 問い合わせ／リクエスト窓口 -->
