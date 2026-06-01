@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>つかいかた｜自分へのご褒美タイプ診断</title>
+  <meta name="description" content="「自分へのご褒美タイプ診断」のつかいかた。30秒・10問で、あなたにぴったりのごほうびタイプがわかります。">
+  <style>
+    :root{
+      --bg:#FFF6F2; --card:#fff; --ink:#5A4A45; --soft:#8A7A74;
+      --rose:#D98AA6; --rose-deep:#C7637E; --gold:#E0A35E; --line:#F0E2DC;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;
+      background:linear-gradient(160deg,#FFF0F3 0%,#FFF6F2 45%,#FBF3EC 100%);
+      color:var(--ink);line-height:1.8;-webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:540px;margin:0 auto;padding:32px 20px 48px}
+
+    .hero{text-align:center;margin-bottom:28px}
+    .hero-emoji{font-size:64px}
+    .hero h1{font-size:24px;font-weight:800;color:var(--rose-deep);margin:6px 0 10px}
+    .hero p{font-size:15px;color:var(--ink)}
+    .badges{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .badges span{background:#FFF0F3;color:var(--soft);font-size:13px;border-radius:999px;padding:5px 12px}
+
+    .cta{
+      display:block;text-align:center;text-decoration:none;
+      background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;
+      font-weight:800;font-size:17px;border-radius:999px;padding:17px;
+      box-shadow:0 8px 20px rgba(201,99,126,.35);margin:24px 0;
+    }
+    .cta.small{font-size:15px;padding:14px}
+
+    .step{
+      background:var(--card);border-radius:20px;padding:20px;margin-bottom:18px;
+      box-shadow:0 8px 26px rgba(170,120,110,.10);
+    }
+    .step-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .step-no{
+      flex:none;width:34px;height:34px;border-radius:50%;
+      background:linear-gradient(135deg,var(--rose),var(--rose-deep));color:#fff;
+      font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px;
+    }
+    .step-head h2{font-size:17px;font-weight:800}
+    .step img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+    .cap{font-size:13px;color:var(--soft);margin-top:10px;text-align:center}
+
+    .share-note{display:flex;gap:14px;align-items:center}
+    .share-note img{width:42%}
+    .share-note p{font-size:14px}
+
+    .feedback{text-align:center;margin-top:26px;font-size:13px;color:var(--soft)}
+    .feedback a{color:var(--rose-deep);font-weight:700;text-decoration:none;border-bottom:2px solid var(--rose);padding-bottom:2px}
+
+    footer{text-align:center;font-size:12px;color:var(--soft);margin-top:30px}
+    footer a{color:var(--rose-deep);text-decoration:none;font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="hero-emoji">🎁</div>
+      <h1>自分へのご褒美タイプ診断</h1>
+      <p>毎日おつかれさま。<br>あなたにぴったりの“ごほうび”、<br>30秒で見つけてみませんか？</p>
+      <div class="badges"><span>⏱ 約30秒</span><span>📝 全10問</span><span>💌 結果はシェアOK</span></div>
+    </div>
+
+    <a class="cta" href="https://tamagoojiji.github.io/tamago-shindan/apps/reward-type/">▶ 無料で診断してみる</a>
+
+    <div class="step">
+      <div class="step-head"><div class="step-no">1</div><h2>「診断をはじめる」を押す</h2></div>
+      <img src="img/guide-1-intro.png" alt="スタート画面">
+    </div>
+
+    <div class="step">
+      <div class="step-head"><div class="step-no">2</div><h2>直感で10問えらぶだけ</h2></div>
+      <img src="img/guide-2-quiz.png" alt="質問画面">
+      <p class="cap">考えすぎず、ピンときたものでOK 🥚</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><div class="step-no">3</div><h2>あなたのタイプがわかる</h2></div>
+      <img src="img/guide-3-result.png" alt="結果画面">
+    </div>
+
+    <div class="step">
+      <div class="step-head"><div class="step-no">4</div><h2>結果はそのままシェア</h2></div>
+      <div class="share-note">
+        <img src="img/share-sample.png" alt="シェア画像の例">
+        <p>「画像で保存」でこの画像が作れます。<br>ストーリーズやLINEでどうぞ💕</p>
+      </div>
+    </div>
+
+    <a class="cta small" href="https://tamagoojiji.github.io/tamago-shindan/apps/reward-type/">▶ さっそく診断する（無料）</a>
+
+    <div class="feedback">
+      <p>「こんな診断・アプリほしい」のリクエストや感想は<br>こちらから気軽にどうぞ👇</p>
+      <a href="https://tamagoojiji.github.io/tamago-tools/apps/feedback/" target="_blank" rel="noopener">リクエスト・感想を送る</a>
+    </div>
+
+    <footer>powered by <a href="https://www.instagram.com/tamago.app" target="_blank" rel="noopener">@tamago.app</a></footer>
+  </div>
+</body>
+</html>
