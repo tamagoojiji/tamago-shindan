@@ -333,6 +333,10 @@ var ShindanEngine = (function () {
       html += '<span class="recommend-category">' + rec.category + '</span>';
       html += '</div>';
       html += '<p class="recommend-advice">' + rec.advice + '</p>';
+      // 自作アプリが紐づくカテゴリのみ誘導ボタンを表示（他診断は appName/appUrl 無し＝素通り）
+      if (rec.appName && rec.appUrl) {
+        html += '<a class="recommend-app-btn" href="' + rec.appUrl + '" target="_blank" rel="noopener">▶ ' + rec.appName + 'を使う</a>';
+      }
       html += '</div>';
     });
     listEl.innerHTML = html;

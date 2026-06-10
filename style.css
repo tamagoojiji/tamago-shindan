@@ -446,6 +446,24 @@ body {
   margin-left: 32px;
 }
 
+.recommend-app-btn {
+  display: inline-block;
+  margin: 12px 0 2px 32px;
+  background: var(--primary);
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.recommend-app-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
 /* === シェアセクション === */
 .share-section {
   margin-top: 24px;

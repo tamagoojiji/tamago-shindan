@@ -152,17 +152,30 @@ var SHINDAN_CONFIG = {
   ],
 
   getRecommendations: function (answers) {
+    // appName / appUrl があるカテゴリは自作アプリへ誘導（結果画面にボタン表示）
     var adviceMap = {
-      scheduling: "Googleカレンダー+予約システム連携で、ダブルブッキング防止＆リマインド自動送信ができます",
-      invoicing: "freeeやMisocaなどのクラウド請求書を使えば、月末の請求作業が10分で完了します",
-      followup: "LINE公式アカウントのステップ配信で、来店後のフォローを完全自動化できます",
-      sns: "投稿予約ツール（Meta Business Suite等）を使えば、月初にまとめて投稿を仕込めます",
-      accounting: "マネーフォワードやfreeeのレシート撮影機能で、経費入力を90%削減できます",
-      crm: "顧客管理ツール（Notion・Airtable等）に移行すれば、お客様情報を瞬時に検索できます",
-      inventory: "スプレッドシート+GASで在庫が一定数を切ったら自動通知する仕組みが作れます",
-      payment: "Square・STORESなどでオンライン決済を導入すれば、未回収リスクもゼロに",
-      marketing: "Instagram+LINE公式の組み合わせで、SNS集客→リスト化を自動化できます",
-      communication: "Slack・Notion等のツールで「言った言わない」問題を解消できます"
+      scheduling: {
+        advice: "予約をカレンダーとリストで見える化。空き状況をひと目で把握して、ダブルブッキングを防げます",
+        appName: "予約管理シミュレーション",
+        appUrl: "https://tamagoojiji.github.io/tamago-shindan/apps/reservation-sim/"
+      },
+      invoicing: {
+        advice: "項目を入力するだけで請求書を作成・保存。毎月の請求作業をぐっと短縮できます",
+        appName: "請求書ツール",
+        appUrl: "https://tamagoojiji.github.io/tamago-tools/apps/invoice/"
+      },
+      accounting: {
+        advice: "レシートを撮るだけでAIが自動でカテゴリ分け。月次の経費がそのまま見える化されます",
+        appName: "レシート経費記録",
+        appUrl: "https://tamagoojiji.github.io/tamago-tools/apps/receipt-tracker/"
+      },
+      followup: { advice: "LINE公式アカウントのステップ配信で、来店後のフォローを完全自動化できます" },
+      sns: { advice: "投稿予約ツール（Meta Business Suite等）を使えば、月初にまとめて投稿を仕込めます" },
+      crm: { advice: "顧客管理ツール（Notion・Airtable等）に移行すれば、お客様情報を瞬時に検索できます" },
+      inventory: { advice: "スプレッドシート+GASで在庫が一定数を切ったら自動通知する仕組みが作れます" },
+      payment: { advice: "Square・STORESなどでオンライン決済を導入すれば、未回収リスクもゼロに" },
+      marketing: { advice: "Instagram+LINE公式の組み合わせで、SNS集客→リスト化を自動化できます" },
+      communication: { advice: "Slack・Notion等のツールで「言った言わない」問題を解消できます" }
     };
 
     // スコアが低い順にソート → TOP3
@@ -173,9 +186,12 @@ var SHINDAN_CONFIG = {
     var recommendations = [];
     for (var i = 0; i < sorted.length && recommendations.length < 3; i++) {
       if (sorted[i].points <= 1) {
+        var entry = adviceMap[sorted[i].category] || {};
         recommendations.push({
           category: sorted[i].categoryLabel,
-          advice: adviceMap[sorted[i].category] || ""
+          advice: entry.advice || "",
+          appName: entry.appName || null,
+          appUrl: entry.appUrl || null
         });
       }
     }
