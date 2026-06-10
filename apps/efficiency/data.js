@@ -171,12 +171,20 @@ var SHINDAN_CONFIG = {
       },
       followup: { advice: "LINE公式アカウントのステップ配信で、来店後のフォローを完全自動化できます" },
       sns: { advice: "投稿予約ツール（Meta Business Suite等）を使えば、月初にまとめて投稿を仕込めます" },
-      crm: { advice: "顧客管理ツール（Notion・Airtable等）に移行すれば、お客様情報を瞬時に検索できます" },
-      inventory: { advice: "スプレッドシート+GASで在庫が一定数を切ったら自動通知する仕組みが作れます" },
+      crm: {
+        advice: "お客様の連絡先・メモを登録。連絡が空いた人を「そろそろ連絡」でお知らせします",
+        appName: "かんたん顧客管理",
+        appUrl: "https://tamagoojiji.github.io/tamago-tools/apps/crm/"
+      },
+      inventory: {
+        advice: "品目を登録して数量を管理。最低在庫以下になると「要発注」でお知らせします",
+        appName: "かんたん在庫管理",
+        appUrl: "https://tamagoojiji.github.io/tamago-tools/apps/inventory/"
+      },
       payment: { advice: "Square・STORESなどでオンライン決済を導入すれば、未回収リスクもゼロに" },
       marketing: {
-        advice: "Instagramのインサイト（数字）を毎日自動で記録。集めたデータをもとに、集客の次の一手を提案します",
-        appName: "Instagramインサイト分析",
+        advice: "Instagramのインサイトを毎日自動で記録し、発信を伸ばす次の一手を提案します。※発信者向け・有料（¥5,000予定）",
+        appName: "Instagramインサイト分析（発信者向け）",
         appUrl: "https://tamagoojiji.github.io/ig-insights-menu/"
       },
       communication: { advice: "Slack・Notion等のツールで「言った言わない」問題を解消できます" }
